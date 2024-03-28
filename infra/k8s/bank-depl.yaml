@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bank
+  template:
+    metadata:
+      labels:
+        app: bank
+    spec:
+      containers:
+        - name: bank
+          image: purthas/bank
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bank-srv
+spec:
+  selector:
+    app: bank
+  ports:
+    - name: posts
+      protocol: TCP
+      port: 4001
+      targetPort: 4001

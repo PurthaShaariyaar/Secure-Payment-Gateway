@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: payment.com
+    http:
+      paths:
+      - path: /checkFunds
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: bank-srv
+            port:
+              number: 4001
+      - path: /processPayment
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: payment-srv
+            port:
+              number: 4000
+      - path: /?(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: client-srv
+            port:
+              number: 3000
